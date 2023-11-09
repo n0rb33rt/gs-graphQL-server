@@ -21,7 +21,7 @@ Learning kickstart GraphQL with Java Spring Boot 3.1.5 CRUD Application
 - Define which attitudes are there in your class with type.
 - Contract between consumer and provider on how to get and alter the data for the application. Because if you don't provide the schema for a field, then that field will not be visible to your customers.
 
-Example of query in schema:
+Example of schema:
 
 ```bash
 type Query {
