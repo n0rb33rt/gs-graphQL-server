@@ -1,6 +1,5 @@
 # Spring Boot kickstart GraphQL CRUD Demo Project
 
-These instructions will help you get a copy of the project up and running on your local machine for development and testing purposes. Follow the steps below.
 ## Features
 
 - GraphQL stands for GraphQL query language and developed by Facebook.
