@@ -1,0 +1,50 @@
+type Query {
+    getStudents : [StudentResponse]
+    getStudentById(id : Int) : StudentResponse
+}
+type Mutation{
+    newStudent(studentRequest:StudentRequest) : StudentResponse
+    deleteStudentById(id : Int) : StudentResponse
+    updateStudent(studentRequest: StudentRequest) : StudentResponse
+}
+
+input StudentRequest {
+    id : Int
+    firstName : String!
+    lastName : String!
+    email : String!
+    address: AddressRequest!
+    learningSubjects: [LearningSubjectRequest]!
+}
+
+input AddressRequest{
+    id: Int
+    city : String!
+    street : String!
+}
+
+input LearningSubjectRequest{
+    id: Int
+    subjectName : String!
+    marksObtained: Float!
+}
+type StudentResponse{
+    id : Int
+    firstName : String
+    lastName : String
+    email : String
+    address : AddressResponse
+    learningSubjects : [SubjectResponse]
+}
+
+type AddressResponse{
+    id : Int
+    city : String
+    street : String
+}
+
+type SubjectResponse {
+    id : Int
+    subjectName : String
+    marksObtained : Float
+}

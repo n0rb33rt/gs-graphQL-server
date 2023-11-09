@@ -1,0 +1,18 @@
+services:
+  postgres:
+    container_name: graphql_course
+    image: postgres
+    environment:
+      POSTGRES_USER: bestuser
+      POSTGRES_PASSWORD: bestuser
+    volumes:
+      - postgres_student:/var/lib/postgresql/data
+    networks:
+      - postgres_student
+    ports:
+      - "5432:5432"
+networks:
+  postgres_student:
+    driver: bridge
+volumes:
+  postgres_student:
