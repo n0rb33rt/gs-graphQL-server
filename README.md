@@ -71,7 +71,7 @@ We should use graphQL Resolver to increase our performance, because user may not
 
 ## Dependencies that are needed
 ```bash
-        <dependency>
+                <dependency>
 			<groupId>com.graphql-java-kickstart</groupId>
 			<artifactId>graphql-spring-boot-starter</artifactId>
 			<version>15.0.0</version>
