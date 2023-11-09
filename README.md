@@ -17,11 +17,67 @@ Learning kickstart GraphQL with Java Spring Boot 3.1.5 CRUD Application
 - GraphQL needs schema files.
 
 ## GraphQL Schema
-- Schema provides flexibility to consumers that which attitudes they want in response. (It has .graphls file extension)
+- Schema provides flexibility to consumers that which attitudes they want in response. (It has .graphqls file extension and located at resources.graphql)
 - Define which attitudes are there in your class with type.
 - Contract between consumer and provider on how to get and alter the data for the application. Because if you don't provide the schema for a field, then that field will not be visible to your customers.
 
+Example of query in schema:
 
+```bash
+type Query {
+    getStudents : [StudentResponse] 
+    getStudentById(id : Int) : StudentResponse
+}
+
+type Mutation{
+    newStudent(studentRequest:StudentRequest) : StudentResponse
+    deleteStudentById(id : Int) : StudentResponse
+    updateStudent(studentRequest: StudentRequest) : StudentResponse
+}
+
+input StudentRequest {
+    id : Int
+    firstName : String!
+    lastName : String!
+    email : String!
+    address: AddressRequest!
+    learningSubjects: [LearningSubjectRequest]!
+}
+
+input AddressRequest{
+    id: Int
+    city : String!
+    street : String!
+}
+
+input LearningSubjectRequest{
+    id: Int
+    subjectName : String!
+    marksObtained: Float!
+}
+
+type StudentResponse{
+    id : Int
+    firstName : String
+    lastName : String
+    email : String
+    address : AddressResponse
+    learningSubjects : [SubjectResponse]
+}
+
+type AddressResponse{
+    id : Int
+    city : String
+    street : String
+}
+
+type SubjectResponse {
+    id : Int
+    subjectName : String
+    marksObtained : Float
+}
+```
+In GraphQL, the [] notation is used to indicate an array or list type and ! is used to forbid absence of the field. Additionally, "type" serves for response and "input" for request. 
 
 
 ## GraphiQL
@@ -67,11 +123,29 @@ We should use graphQL Resolver to increase our performance, because user may not
 - We have not to invoke the method manually
 - Entity types of variables must have lazy loading.
 - One resolver for one response
+ 
+```bash
+public class StudentResponseResolver implements GraphQLResolver<StudentResponse> {
+    public List<SubjectResponse> getLearningSubjects(StudentResponse studentResponse){
+        List<SubjectResponse> learningSubjects = new ArrayList<>();
 
+        if (studentResponse.getStudent().getLearningSubjects() != null) {
+            for (Subject subject: studentResponse.getStudent().getLearningSubjects()) {
+                learningSubjects.add(new SubjectResponse(subject));
+            }
+        }
 
+        return learningSubjects;
+    }
+    public AddressResponse getAddress(StudentResponse studentResponse){
+        return new AddressResponse(studentResponse.getStudent().getAddress());
+    }
+
+}
+```
 ## Dependencies that are needed
 ```bash
-                <dependency>
+        <dependency>
 			<groupId>com.graphql-java-kickstart</groupId>
 			<artifactId>graphql-spring-boot-starter</artifactId>
 			<version>15.0.0</version>
@@ -88,4 +162,26 @@ We should use graphQL Resolver to increase our performance, because user may not
 			<version>15.0.0</version>
 			<scope>test</scope>
 		</dependency>
+```
+
+## Controller
+We just need to annotate the class as a component, extend GraphQLQueryResolver or GraphQLMutationResolver and name methods like name of query or mutation requests defined in schema.
+
+It looks like:
+```bash
+@Component
+@AllArgsConstructor
+public class StudentMutation implements GraphQLMutationResolver {
+    private final StudentService studentService;
+
+    public StudentResponse newStudent(StudentRequest studentRequest){
+        return studentService.save(studentRequest);
+    }
+    public StudentResponse deleteStudentById(Long id){
+        return studentService.deleteStudentById(id);
+    }
+    public StudentResponse updateStudent(StudentRequest studentRequest){
+        return studentService.updateStudent(studentRequest);
+    }
+}
 ```
