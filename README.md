@@ -1,11 +1,20 @@
+
 # Spring Boot kickstart GraphQL CRUD Demo Project
+
+Learning kickstart GraphQL with Java Spring Boot 3.1.5 CRUD Application
+
 
 ## Features
 
 - GraphQL stands for GraphQL query language and developed by Facebook.
 - Like SQL here we use query to fetch the data. You have flexibility which data to fetch.
-- Query to fetch the data(like GET) and Mutation to alter the data(like POST, PUT, DELETE).
+- Query to fetch the data (like GET) and Mutation to alter the data(like POST, PUT, DELETE).
 
+## GraphQL vs REST
+- Rest is having fixed response while GraphQL provides flexibilityto consumers.
+- Over and under fetching with REST API. You don't need to perform two request to fetch the data from the server, you can combine into 1 request.
+- In GraphQL we don't have REST Controller, we just have query and mutation. We don't need to provide mappings, we just have 1 endpoint in our application.
+- GraphQL needs schema files.
 
 ## GraphQL Schema
 - Schema provides flexibility to consumers that which attitudes they want in response. (It has .graphls file extension)
@@ -13,11 +22,6 @@
 - Contract between consumer and provider on how to get and alter the data for the application. Because if you don't provide the schema for a field, then that field will not be visible to your customers.
 
 
-## GraphQL vs REST
-- Rest is having fixed response while GraphQL provides flexibilityto consumers.
-- Over and under fetching with REST API. You don't need to perform two request to fetch the data from the server, you can combine into 1 request.
-- In GraphQL we don't have REST Controller, we just have query and mutation. We don't need to provide mappings, we just have 1 endpoint in our application.
-- GraphQL needs schema files.
 
 
 ## GraphiQL
@@ -38,4 +42,50 @@ GraphiQL is an interactive, web-based graphical user interface (GUI) for explori
 
 - Easy Access: Many GraphQL services provide a GraphiQL interface that can be accessed via a web URL, simplifying the process of exploring the API.
 
+To enable GraphiQL you need to open the application.properties and write:
+```bash
+  graphql.graphiql.enabled=true
+```
+To change graphiQL url: 
+```bash
+  graphql.graphiql.mapping=/graphiql
+```
 
+To change base url to perform requests: 
+```bash
+graphql.servlet.mapping=/student-service
+```
+And if you did this, you need to change base graphql url for graphiQL:
+```bash
+graphql.graphiql.endpoint.graphql=/student-service
+```
+
+## Resolver
+We should use graphQL Resolver to increase our performance, because user may not want to load some data, but our database will do it. 
+
+- All methods in resolver must be public
+- We have not to invoke the method manually
+- Entity types of variables must have lazy loading.
+- One resolver for one response
+
+
+## Dependencies that are needed
+```bash
+        <dependency>
+			<groupId>com.graphql-java-kickstart</groupId>
+			<artifactId>graphql-spring-boot-starter</artifactId>
+			<version>15.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.graphql-java-kickstart</groupId>
+			<artifactId>graphql-kickstart-spring-webflux</artifactId>
+			<version>15.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.graphql-java-kickstart</groupId>
+			<artifactId>graphql-spring-boot-starter-test</artifactId>
+			<version>15.0.0</version>
+			<scope>test</scope>
+		</dependency>
+```
