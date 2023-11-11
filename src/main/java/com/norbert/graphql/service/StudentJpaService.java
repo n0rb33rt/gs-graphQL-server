@@ -22,7 +22,7 @@ public class StudentJpaService implements StudentDAO{
     @Override
     public Student getStudentById(Long id) {
         return studentRepository.findById(id).orElseThrow(()->
-                new BadRequestException("The student with id " + id  + " is not present" ));
+                new BadRequestException("The student with id " + id  + " is not present" , "id"));
     }
 
     @Override

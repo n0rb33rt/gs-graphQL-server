@@ -34,7 +34,7 @@ public class StudentService {
     }
     public StudentResponse updateStudent(StudentRequest studentRequest){
         if(studentRequest.getId() == null || studentRequest.getAddress().getId() == null)
-            throw new BadRequestException("Id of all fields must be provided");
+            throw new BadRequestException("Id of all fields must be provided", "id");
         Student student = studentJpaService.getStudentById(studentRequest.getId());
         StudentRequestMapper studentRequestMapper = new StudentRequestMapper(student);
         Student updatedStudent = studentRequestMapper.apply(studentRequest);
